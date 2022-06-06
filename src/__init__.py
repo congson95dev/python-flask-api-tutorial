@@ -5,14 +5,16 @@ from flask_jwt import JWT
 from src.models.user import db
 from src.models.user import User
 from src.common.security import authenticate, identity
+from src.Config import Config
 
 app = Flask(__name__)
 
 # config
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'sqlite://///home/ncson1/project/flask-project/flask-api-tutorial/src/bookstore.db'
+# to create new db, just need to set db name in SQLALCHEMY_DATABASE_URI,
+# and run "flask db upgrade", so it will create new db for you
+app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQL_ALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['JWT_SECRET_KEY'] = '21321321421415151'
+app.config['JWT_SECRET_KEY'] = Config.JWT_SECRET_KEY
 
 # assign app to db
 # we use this instead of db = SQLAlchemy(app)
