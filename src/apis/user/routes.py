@@ -6,6 +6,7 @@ from src.models.user import db
 from src.models.user import User
 from src import api
 from sqlalchemy import and_, or_, not_
+import re
 
 # this have to import below the api variable, because api variable is called in this UserSchema file
 from src.schemas.User.UserSchema import user_register_schema
@@ -33,8 +34,10 @@ class Users(Resource):
     # @jwt_required used to make user must set token before call api
     @jwt_required()
     def get(self):
+        # handle search
         search_params = request.args.get('search')
         search = "%{}%".format(search_params)
+        # multiple search, using or_
         users = User.query.filter(
             or_(
                 User.username.like(search),
@@ -50,21 +53,34 @@ class Users(Resource):
 
             result.append(user_data)
         if not result:
-            return jsonify({'message': 'we cant find any user that matched your request'})
-        return jsonify({'users': result})
+            return {
+                   "message": "we can't find any user that's matched your request",
+               }, 200
+        return {
+                   "users": result,
+               }, 200
 
     # this expect is called to schema, and this schema is like a validate to this function
     # also, it will allow us to edit the value of api in browser
     @user_api.expect(user_register_schema, validate=True)
     def post(self):
         data = request.get_json()
+        if not validate_email(data.get('email')):
+            return {
+                       "message": "Invalid Email",
+                   }, 500
         try:
             user = User(data.get('email'), data.get('username'), data.get('password'))
             db.session.add(user)
             db.session.commit()
-        except:
-            return jsonify({'message': 'An Exception Occurred'})
-        return jsonify({'message': 'User created', 'user_id': user.id})
+        except Exception as e:
+            return {
+                       "message": "An Exception Occurred. Detail: %s" % str(e),
+                   }, 500
+        return {
+                   "message": "User created",
+                   "user_id": user.id
+               }, 200
 
 
 @user_api.route('/<int:user_id>')
@@ -81,7 +97,9 @@ class UserDetail(Resource):
             'username': user.username,
             'password': user.password
         }
-        return jsonify({'user': result})
+        return {
+                   "user": result,
+               }, 200
 
     # @jwt_required used to make user must set token before call api
     @jwt_required()
@@ -98,9 +116,13 @@ class UserDetail(Resource):
                 if data.get('password'):
                     user.password = data.get('password')
                 db.session.commit()
-            except:
-                return jsonify({'message': 'An Exception Occurred'})
-            return jsonify({'message': "User %s's password updated, new password: %s" % (user.username, data.get('password'))})
+            except Exception as e:
+                return {
+                           "message": "An Exception Occurred. Detail: %s" % str(e),
+                       }, 500
+            return {
+                       "message": "User %s's password updated, new password: %s" % (user.username, data.get('password'))
+                   }, 200
 
     # @jwt_required used to make user must set token before call api
     @jwt_required()
@@ -112,6 +134,16 @@ class UserDetail(Resource):
             try:
                 db.session.delete(user)
                 db.session.commit()
-            except:
-                return jsonify({'message': 'An Exception Occurred'})
-            return jsonify({'message': 'User deleted'})
+            except Exception as e:
+                return {
+                           "message": "An Exception Occurred. Detail: %s" % str(e),
+                       }, 500
+            return {
+                       "message": "User deleted",
+                   }, 200
+
+
+# validate email so it will be in the format like test@gmail.com
+def validate_email(email):
+    regex = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
+    return True if re.match(regex, email) else False
