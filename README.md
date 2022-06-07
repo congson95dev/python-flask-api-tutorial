@@ -12,7 +12,10 @@
 
 `pip install -r requirements.txt`
 
-### then, run this command to migrate database
+### then, change db file path in SQL_ALCHEMY_DATABASE_URI params of .env file so it matched your current directory
+`SQL_ALCHEMY_DATABASE_URI=sqlite://///home/ncson1/project/flask-project/flask-api-tutorial-2/src/bookstore.db`
+### and delete the current db file, which in this case is `bookstore.db`
+### after that, run this command to migrate database
 
 `flask db init`
 
