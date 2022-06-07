@@ -5,6 +5,7 @@ from flask_jwt import jwt_required
 from src.models.user import db
 from src.models.user import User
 from src import api
+from sqlalchemy import and_, or_, not_
 
 # this have to import below the api variable, because api variable is called in this UserSchema file
 from src.schemas.User.UserSchema import user_register_schema
@@ -32,16 +33,24 @@ class Users(Resource):
     # @jwt_required used to make user must set token before call api
     @jwt_required()
     def get(self):
-        users = User.query.all()
+        search_params = request.args.get('search')
+        search = "%{}%".format(search_params)
+        users = User.query.filter(
+            or_(
+                User.username.like(search),
+                User.email.like(search)
+            )
+        ).all()
         result = []
         for user in users:
             user_data = {}
+            user_data['email'] = user.email
             user_data['username'] = user.username
             user_data['password'] = user.password
 
             result.append(user_data)
         if not result:
-            return jsonify({'message': 'there is no user yet'})
+            return jsonify({'message': 'we cant find any user that matched your request'})
         return jsonify({'users': result})
 
     # this expect is called to schema, and this schema is like a validate to this function
@@ -50,7 +59,7 @@ class Users(Resource):
     def post(self):
         data = request.get_json()
         try:
-            user = User(data.get('username'), data.get('password'))
+            user = User(data.get('email'), data.get('username'), data.get('password'))
             db.session.add(user)
             db.session.commit()
         except:
@@ -60,6 +69,20 @@ class Users(Resource):
 
 @user_api.route('/<int:user_id>')
 class UserDetail(Resource):
+    # @jwt_required used to make user must set token before call api
+    @jwt_required()
+    def get(self, user_id):
+        user = User.query.filter_by(id=user_id).first()
+        if not user:
+            return jsonify({'message': 'user with id %s does not exist' % user_id})
+        result = {
+            'id': user.id,
+            'email': user.email,
+            'username': user.username,
+            'password': user.password
+        }
+        return jsonify({'user': result})
+
     # @jwt_required used to make user must set token before call api
     @jwt_required()
     # this expect is called to schema, and this schema is like a validate to this function

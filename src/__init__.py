@@ -15,6 +15,8 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQL_ALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['JWT_SECRET_KEY'] = Config.JWT_SECRET_KEY
+# set this so when we return jsonify in api, it will not sort the result by alphabelt
+app.config['JSON_SORT_KEYS'] = False
 
 # assign app to db
 # we use this instead of db = SQLAlchemy(app)
