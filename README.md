@@ -1,4 +1,4 @@
-# This project is to practice flask api  
+# This project is to practice flask api 
 
 ### we use flask_restx to handle api and flask_jwt to handle authenticate 
 
