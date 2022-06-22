@@ -1,6 +1,6 @@
 # This project is to practice flask api  
 
-### we use flask_restx to handle api and flask_jwt to handle authenticate
+### we use flask_restx to handle api and flask_jwt to handle authenticate 
 
 ### first of all, you need to run this command to create environment for this project
 
