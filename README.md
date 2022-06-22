@@ -4,7 +4,7 @@
 
 ### first of all, you need to run this command to create environment for this project
 
-`cd project_name`
+`cd project_name` 
 
 `python3 -m venv venv`
 
