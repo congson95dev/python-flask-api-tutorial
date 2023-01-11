@@ -38,7 +38,9 @@ migrate.init_app(app, db)
 # to use this jwt, you need to call /auth with body = username and password of user to get access token
 #
 # then you call to /auth/protected to check access token,
-# need to transfer header = Authorization: JWT + ' ' + your access token
+# need to transfer to the header:
+# key: Authorization
+# value: JWT + ' ' + your access token
 #
 # from now on, if you want your api to set token before call, you need to add @jwt_required() before function
 jwt = JWT(app, authenticate, identity)
