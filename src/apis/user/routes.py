@@ -36,20 +36,23 @@ class Users(Resource):
     def get(self):
         # handle search
         search_params = request.args.get('search')
-        search = "%{}%".format(search_params)
-        # multiple search, using or_
-        users = User.query.filter(
-            or_(
-                User.username.like(search),
-                User.email.like(search)
-            )
-        ).all()
+        if search_params:
+            search = "%{}%".format(search_params)
+            # multiple search, using or_
+            users = User.query.filter(
+                or_(
+                    User.username.like(search),
+                    User.email.like(search)
+                )
+            ).all()
+        else:
+            users = User.query.with_entities(User.email, User.username)
+
         result = []
         for user in users:
             user_data = {}
             user_data['email'] = user.email
             user_data['username'] = user.username
-            user_data['password'] = user.password
 
             result.append(user_data)
         if not result:
@@ -101,8 +104,6 @@ class UserDetail(Resource):
                    "user": result,
                }, 200
 
-    # @jwt_required used to make user must set token before call api
-    @jwt_required()
     # this expect is called to schema, and this schema is like a validate to this function
     # also, it will allow us to edit the value of api in browser
     @user_api.expect(user_update_schema, validate=True)

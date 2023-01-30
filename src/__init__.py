@@ -6,6 +6,7 @@ from src.models.user import db
 from src.models.user import User
 from src.common.security import authenticate, identity
 from src.Config import Config
+import datetime
 
 app = Flask(__name__)
 
@@ -15,6 +16,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQL_ALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['JWT_SECRET_KEY'] = Config.JWT_SECRET_KEY
+app.config["JWT_EXPIRATION_DELTA"] = datetime.timedelta(days=30)
 # set this so when we return jsonify in api, it will not sort the result by alphabelt
 app.config['JSON_SORT_KEYS'] = False
 
