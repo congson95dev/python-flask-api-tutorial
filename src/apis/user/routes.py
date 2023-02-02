@@ -1,17 +1,15 @@
-from flask import jsonify, request
-from werkzeug.security import generate_password_hash
-from flask_restx import Resource, Namespace
-from flask_jwt import jwt_required
-from src.models.user import db
-from src.models.user import User
-from src import api
-from sqlalchemy import and_, or_, not_
 import re
 
-# this have to import below the api variable, because api variable is called in this UserSchema file
-from src.schemas.User.UserSchema import user_register_schema
-from src.schemas.User.UserSchema import user_update_schema
+from flask import jsonify, request
+from flask_jwt_extended import jwt_required
+from flask_restx import Resource, Namespace
+from sqlalchemy import or_
 
+from src import api
+from src.models.base import db
+from src.models.user import User
+# this have to import below the api variable, because api variable is called in this UserSchema file
+from src.schemas.User.UserSchema import user_register_schema, user_update_schema
 
 # we use flask_restx to handle api instead of Flask itself
 # in this flask_restx, the function is named by the HTTP method, such as get() = GET, post() = POST
@@ -88,17 +86,14 @@ class Users(Resource):
 
 @user_api.route('/<int:user_id>')
 class UserDetail(Resource):
-    # @jwt_required used to make user must set token before call api
-    @jwt_required()
     def get(self, user_id):
-        user = User.query.filter_by(id=user_id).first()
+        user = User.query.filter_by(id=user_id).with_entities(User.email, User.username).first()
         if not user:
             return jsonify({'message': 'user with id %s does not exist' % user_id})
         result = {
-            'id': user.id,
+            'id': user_id,
             'email': user.email,
-            'username': user.username,
-            'password': user.password
+            'username': user.username
         }
         return {
                    "user": result,
@@ -125,8 +120,6 @@ class UserDetail(Resource):
                        "message": "User %s's password updated, new password: %s" % (user.username, data.get('password'))
                    }, 200
 
-    # @jwt_required used to make user must set token before call api
-    @jwt_required()
     def delete(self, user_id):
         if user_id:
             user = User.query.filter_by(id=user_id).first()

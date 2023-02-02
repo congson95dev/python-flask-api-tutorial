@@ -1,8 +1,10 @@
 # This project is to practice flask api 
 
-### we use flask_restx to handle api and flask_jwt to handle authenticate 
+### We use flask_restx to handle api and flask_jwt_extend to handle authenticate 
 
-### first of all, you need to run this command to create environment for this project
+### For db, we use postgres
+
+### First of all, you need to run this command to create environment for this project
 
 `cd project_name`
 
@@ -12,17 +14,21 @@
 
 `pip install -r requirements.txt`
 
-### then, change db file path in SQL_ALCHEMY_DATABASE_URI params of .env file so it matched your current directory
-`SQL_ALCHEMY_DATABASE_URI=sqlite://///home/ncson1/project/flask-project/flask-api-tutorial-2/src/bookstore.db`
-### and delete the current db file, which in this case is `bookstore.db`
-### after that, run this command to migrate database
+### If you don't have db yet, please follow this instruction:
 
-`flask db init`
+`sudo -i -u postgres psql`
 
-`flask db migrate -m "Initial migration."`
+`CREATE DATABASE flask_api_tutorial_2;`
+
+`CREATE USER fudo8 WITH PASSWORD 'admin123';`
+
+`GRANT ALL PRIVILEGES ON DATABASE flask_api_tutorial_2 TO fudo8;`
+
+### Then you need to config db info in .env file
+### After that, run this command to migrate database
 
 `flask db upgrade`
 
-### now, you are good to go
-### other information i've comment in the code
-### try to read it to know how to use this api project
+### Now, you are good to go
+### Other information i've comment in the code
+### Try to read it to know how to use this api project
