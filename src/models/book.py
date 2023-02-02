@@ -1,3 +1,5 @@
+from sqlalchemy import func
+
 from src.models.base import db
 from sqlalchemy.orm import backref
 from datetime import datetime
@@ -15,7 +17,7 @@ class Book(db.Model):
     author = db.relationship("User", backref=backref("books"), foreign_keys=[author_id])
     pages_num = db.Column(db.Integer, nullable=False)
     review = db.Column(db.Text)
-    created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    created_date = db.Column(db.DateTime, nullable=False, server_default=func.now())
     # add foreign key
     created_by = db.Column(db.Integer, db.ForeignKey("users.id"))
 

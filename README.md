@@ -32,3 +32,8 @@
 ### Now, you are good to go
 ### Other information i've comment in the code
 ### Try to read it to know how to use this api project
+
+
+# Other Notes:
+### For migration master data, please check in this file:
+`migrations/versions/2c35179aa1da_create_sample_data_for_users_and_books.py`
