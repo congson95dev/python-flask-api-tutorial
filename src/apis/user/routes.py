@@ -5,7 +5,6 @@ from flask_jwt_extended import jwt_required
 from flask_restx import Resource, Namespace
 from sqlalchemy import or_
 
-from src import api
 from src.models.base import db
 from src.models.user import User
 # this have to import below the api variable, because api variable is called in this UserSchema file
@@ -17,17 +16,14 @@ from src.schemas.User.UserSchema import user_register_schema, user_update_schema
 # we can test API directly on browser
 
 # add namespace for api, when we run in browser, we will see this in the title of each api block
-user_api = Namespace('User', description='User related operations', )
-# assign namespace to url prefix
-# with this, we will have url prefix = /user
-api.add_namespace(user_api, path='/user')
+api = Namespace('User', description='User related operations', )
 
 
 # when we add prefix to api and assign it to namespace, it will now used as a new api
 # so you have to use it like @user_api.route, but not @api.route as normal
 
 
-@user_api.route('/')
+@api.route('/')
 class Users(Resource):
     # @jwt_required used to make user must set token before call api
     @jwt_required()
@@ -63,7 +59,7 @@ class Users(Resource):
 
     # this expect is called to schema, and this schema is like a validate to this function
     # also, it will allow us to edit the value of api in browser
-    @user_api.expect(user_register_schema, validate=True)
+    @api.expect(user_register_schema, validate=True)
     def post(self):
         data = request.get_json()
         if not validate_email(data.get('email')):
@@ -84,7 +80,7 @@ class Users(Resource):
                }, 200
 
 
-@user_api.route('/<int:user_id>')
+@api.route('/<int:user_id>')
 class UserDetail(Resource):
     def get(self, user_id):
         user = User.query.filter_by(id=user_id).with_entities(User.email, User.username).first()
@@ -101,7 +97,7 @@ class UserDetail(Resource):
 
     # this expect is called to schema, and this schema is like a validate to this function
     # also, it will allow us to edit the value of api in browser
-    @user_api.expect(user_update_schema, validate=True)
+    @api.expect(user_update_schema, validate=True)
     def put(self, user_id):
         if user_id:
             user = User.query.filter_by(id=user_id).first()

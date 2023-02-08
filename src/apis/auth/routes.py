@@ -8,7 +8,7 @@ from flask_jwt_extended import get_jwt, get_jti
 from flask_jwt_extended import jwt_required
 from flask_restx import Resource, Namespace
 
-from src import api, db
+from src import db
 from src import jwt
 from src.Config import Config
 from src.common.security import authenticate
@@ -16,10 +16,7 @@ from src.models import TokenBlocklist
 from src.models.user import User
 
 # add namespace for api, when we run in browser, we will see this in the title of each api block
-auth_api = Namespace('Auth', description='Auth related operations', )
-# assign namespace to url prefix
-# with this, we will have url prefix = /auth
-api.add_namespace(auth_api, path='/auth')
+api = Namespace('Auth', description='Auth related operations', )
 
 
 # this is a trigger called whenever you call function which have jwt_required()
@@ -44,7 +41,7 @@ def check_if_token_revoked(jwt_header, jwt_payload: dict) -> bool:
     return token is not None
 
 
-@auth_api.route("/login")
+@api.route("/login")
 class Login(Resource):
     def post(self):
         username = request.json.get("username", None)
@@ -79,7 +76,7 @@ class Login(Resource):
 # this api will create access token again and return that token to FE,
 # so they will copy this new access token and add to other API
 # docs: https://flask-jwt-extended.readthedocs.io/en/stable/refreshing_tokens/
-@auth_api.route("/refresh")
+@api.route("/refresh")
 class Refresh(Resource):
     @jwt_required(refresh=True)
     def post(self):
@@ -101,7 +98,7 @@ class Refresh(Resource):
         return jsonify(access_token=access_token)
 
 
-@auth_api.route('/protected')
+@api.route('/protected')
 class Protected(Resource):
     # @jwt_required used to make user must set token before call api
     @jwt_required()
@@ -137,7 +134,7 @@ class Protected(Resource):
 # in this logout action, we will try to revoke the access token and refresh token
 # so user can't use access token to access to other api, also they can't use refresh token to create new access token
 # docs: https://flask-jwt-extended.readthedocs.io/en/stable/blocklist_and_token_revoking/
-@auth_api.route("/logout")
+@api.route("/logout")
 class Logout(Resource):
     @jwt_required(verify_type=False)
     def post(self):

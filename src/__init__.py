@@ -5,6 +5,8 @@ from flask_jwt_extended import JWTManager
 from src.models.base import db
 from src.Config import Config
 import datetime
+from src.common.handle_exception import handle_exception
+
 
 app = Flask(__name__)
 
@@ -24,12 +26,15 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 # config for refresh token
 # docs: https://flask-jwt-extended.readthedocs.io/en/stable/refreshing_tokens/
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(minutes=1)
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = datetime.timedelta(days=30)
 
 app.config['JWT_SECRET_KEY'] = Config.JWT_SECRET_KEY
 # set this so when we return jsonify in api, it will not sort the result by alphabelt
 app.config['JSON_SORT_KEYS'] = False
+
+# add handle exception
+handle_exception(app)
 
 # assign app to db
 # we use this instead of db = SQLAlchemy(app)
@@ -64,7 +69,5 @@ api = Api(app)
 # we import this files at the end of the file because in those file,
 # we call some variable of this __init__.py file inside it
 # such as variable "api"
-import src.apis.auth.routes
-import src.apis.user.routes
-# import src.apis.book.routes
+import src.apis.base
 
