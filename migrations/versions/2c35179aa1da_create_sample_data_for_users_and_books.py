@@ -19,6 +19,12 @@ depends_on = None
 
 password = generate_password_hash('123456')
 
+
+# Notice that in here we also insert "id" manually
+# we can prevent that by adding exactly column that we want to insert
+# For example, we want to insert to column ('email','username','password'), so we need to change the query to:
+# "INSERT INTO users ('email','username','password') VALUES {USERS_DATA}"
+
 USERS_DATA = f"""
 (1,'email1@gmail.com','user1','{password}'),
 (2,'email2@gmail.com','user2','{password}'),
