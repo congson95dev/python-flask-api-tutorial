@@ -41,6 +41,16 @@ flask run
 ### Other information i've comment in the code
 ### Try to read it to know how to use this api project
 
+### Run pre-commit:
+### Run this command and fix all the warning before committing code to the repo
+```
+pre-commit run --all-files
+```
+### Or run
+```
+pre-commit install
+```
+
 # Knowledge i've used in this project:
 
 ### 1. flask_restx for handle api

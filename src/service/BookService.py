@@ -20,7 +20,11 @@ class BookService:
         page = params.get("page") or 1
         size = params.get("size") or 20
 
-        query = Book.query.join(User, Book.author_id == User.id).distinct().filter(Book.deleted_date.is_(None))
+        query = (
+            Book.query.join(User, Book.author_id == User.id)
+            .distinct()
+            .filter(Book.deleted_date.is_(None))
+        )
         last_update = (
             Book.query.filter(Book.updated_date.isnot(None))
             .order_by(Book.updated_date.desc())
@@ -28,9 +32,7 @@ class BookService:
         )
 
         if search:
-            query = query.filter(
-                Book.title.ilike(search) | User.username.ilike(search)
-            )
+            query = query.filter(Book.title.ilike(search) | User.username.ilike(search))
 
         total = query.count()
         books = (
@@ -48,7 +50,7 @@ class BookService:
                 "pages_num": book.pages_num,
                 "review": book.review,
                 "rate": book.rate,
-                "title_author": book.title_author
+                "title_author": book.title_author,
             }
             response_data.append(book_dict)
 
@@ -59,8 +61,10 @@ class BookService:
             "total": total,
             # if you got issue "object of type datetime is not json serializable"
             # that because you didn't give the response schema as Datetime
-            # to avoid this, you will need to give response schema as Datetime for this column
-            # you can check in BookFilterDataSchema in file src/schemas/Book/BookSchema.py
+            # to avoid this, you will need to give response schema
+            # as Datetime for this column
+            # you can check in BookFilterDataSchema in file:
+            # src/schemas/Book/BookSchema.py
             "last_update": last_update.updated_date if last_update else None,
         }
 
@@ -68,25 +72,23 @@ class BookService:
     def create_book(data):
         # check if given name is already exists in db, if they do, throw error
         book_check_duplicate_name = Book.query.filter(
-            Book.title == data.get('title')
+            Book.title == data.get("title")
         ).first()
         if book_check_duplicate_name is not None:
-            raise BadRequestException(message=f"Book with name '{data.get('title')}' already exists")
+            raise BadRequestException(
+                message=f"Book with name '{data.get('title')}' already exists"
+            )
 
         # check if author id exists in table user, if not, throw error
         validator = ValidateObjectExistByID()
-        validator(
-            User,
-            id=data.get('author_id'),
-            name="author_id"
-        )
+        validator(User, id=data.get("author_id"), name="author_id")
 
         book = Book(
-            title=data.get('title'),
-            author_id=data.get('author_id'),
-            pages_num=data.get('pages_num'),
-            review=data.get('review'),
-            rate=data.get('rate'),
+            title=data.get("title"),
+            author_id=data.get("author_id"),
+            pages_num=data.get("pages_num"),
+            review=data.get("review"),
+            rate=data.get("rate"),
             created_date=datetime.utcnow(),
             created_by=current_user.id,
             updated_date=datetime.utcnow(),
@@ -101,7 +103,7 @@ class BookService:
             "author_id": book.author_id,
             "pages_num": book.pages_num,
             "review": book.review,
-            "rate": book.rate
+            "rate": book.rate,
         }
 
         return response_data
@@ -118,7 +120,7 @@ class BookService:
             "author_name": book.author.username,
             "pages_num": book.pages_num,
             "review": book.review,
-            "rate": book.rate
+            "rate": book.rate,
         }
 
     @staticmethod
@@ -130,27 +132,24 @@ class BookService:
 
         # check if author id exists in table user, if not, throw error
         validator = ValidateObjectExistByID()
-        validator(
-            User,
-            id=data.get('author_id'),
-            name="author_id"
-        )
+        validator(User, id=data.get("author_id"), name="author_id")
 
         # check if given name is already exists in db, if they do, throw error
         # we only check for other records, not the record with given id
         # that why we have additional filter Book.id != id
         book_check_duplicate_name = Book.query.filter(
-            Book.title == data.get('title'),
-            Book.id != id
+            Book.title == data.get("title"), Book.id != id
         ).first()
         if book_check_duplicate_name is not None:
-            raise BadRequestException(message=f"Book with name '{data.get('title')}' already exists")
+            raise BadRequestException(
+                message=f"Book with name '{data.get('title')}' already exists"
+            )
 
-        book.title = data.get('title')
-        book.author_id = data.get('author_id')
-        book.pages_num = data.get('pages_num')
-        book.review = data.get('review')
-        book.rate = data.get('rate')
+        book.title = data.get("title")
+        book.author_id = data.get("author_id")
+        book.pages_num = data.get("pages_num")
+        book.review = data.get("review")
+        book.rate = data.get("rate")
         book.updated_date = datetime.utcnow()
         book.updated_by = current_user.id
 
@@ -162,7 +161,7 @@ class BookService:
             "author_name": book.author.username,
             "pages_num": book.pages_num,
             "review": book.review,
-            "rate": book.rate
+            "rate": book.rate,
         }
 
     @staticmethod

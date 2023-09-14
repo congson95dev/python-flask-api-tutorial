@@ -22,7 +22,9 @@ class ErrorMessages:
 #       "message": ...
 #       "success": ...
 # }
-# We'll use this later in BadRequestException, NotFoundException, ValidationException, InternalException class below
+# We'll use this later in
+# BadRequestException, NotFoundException, ValidationException, InternalException
+# class below
 class APIException(Exception):
     """
     Base class for all handled exception on API
@@ -73,7 +75,8 @@ class APIException(Exception):
         self.extra = extra
 
     # this function will automatically call in
-    # BadRequestException, NotFoundException, ValidationException, InternalException class below
+    # BadRequestException, NotFoundException, ValidationException, InternalException
+    # class below
     # so it will return the response by our general format, which is:
     # {
     #       "data": ...
@@ -81,7 +84,11 @@ class APIException(Exception):
     #       "success": ...
     # }
     def to_dict(self):
-        return {"success": self.success, "message": self.message, "data": self.data}
+        return {
+            "success": self.success,
+            "message": self.message,
+            "data": self.data,
+        }
 
 
 # this function used @app.errorhandler() to trigger whenever an unexpected error show up
@@ -110,7 +117,8 @@ def handle_exception(app: Flask):
 
 
 # set default message and format for bad request exception
-# we can transfer our custom "message" to this class, or else, it will show the default message
+# we can transfer our custom "message" to this class,
+# or else, it will show the default message
 class BadRequestException(APIException):
     message = ErrorMessages.bad_request
     http_status = HTTPStatus.BAD_REQUEST
@@ -125,7 +133,8 @@ class BadRequestException(APIException):
 
 
 # set default message and format for not found exception
-# we can transfer our custom "message" to this class, or else, it will show the default message
+# we can transfer our custom "message" to this class,
+# or else, it will show the default message
 class NotFoundException(APIException):
     message = ErrorMessages.not_found
     http_status = HTTPStatus.NOT_FOUND
@@ -138,7 +147,8 @@ class NotFoundException(APIException):
 
 
 # set default message and format for validation exception
-# we can transfer our custom "message" to this class, or else, it will show the default message
+# we can transfer our custom "message" to this class,
+# or else, it will show the default message
 class ValidationException(APIException):
     message = ErrorMessages.bad_request
     http_status = HTTPStatus.BAD_REQUEST
@@ -153,14 +163,17 @@ class ValidationException(APIException):
 
 
 # set default message and format for internal exception
-# we can transfer our custom "message" to this class, or else, it will show the default message
+# we can transfer our custom "message" to this class,
+# or else, it will show the default message
 class InternalException(APIException):
     message = ErrorMessages.default
     http_status = HTTPStatus.INTERNAL_SERVER_ERROR
 
     def __init__(self, message=ErrorMessages.default, extra=None):
         super().__init__(
-            http_status=HTTPStatus.INTERNAL_SERVER_ERROR, message=message, extra=extra
+            http_status=HTTPStatus.INTERNAL_SERVER_ERROR,
+            message=message,
+            extra=extra,
         )
 
     def __str__(self):

@@ -12,17 +12,18 @@ from werkzeug.security import generate_password_hash
 
 
 # revision identifiers, used by Alembic.
-revision = '2c35179aa1da'
-down_revision = 'd7ac43aff94d'
+revision = "2c35179aa1da"
+down_revision = "d7ac43aff94d"
 branch_labels = None
 depends_on = None
 
-password = generate_password_hash('123456')
+password = generate_password_hash("123456")
 
 
 # Notice that in here we also insert "id" manually
 # we can prevent that by adding exactly column that we want to insert
-# For example, we want to insert to column ('email','username','password'), so we need to change the query to:
+# For example, we want to insert to column ('email','username','password'),
+# so we need to change the query to:
 # "INSERT INTO users ('email','username','password') VALUES {USERS_DATA}"
 
 USERS_DATA = f"""
@@ -34,11 +35,11 @@ USERS_DATA = f"""
 """
 
 BOOKS_DATA = (
-    ('book 1', 1, 100, 'good', 4),
-    ('book 2', 2, 200, 'bad', 3),
-    ('book 3', 3, 300, 'ok', 5),
-    ('book 4', 4, 400, 'good', 2),
-    ('book 5', 5, 500, 'great', 1)
+    ("book 1", 1, 100, "good", 4),
+    ("book 2", 2, 200, "bad", 3),
+    ("book 3", 3, 300, "ok", 5),
+    ("book 4", 4, 400, "good", 2),
+    ("book 5", 5, 500, "great", 1),
 )
 
 
@@ -77,7 +78,7 @@ def upgrade():
                 "author_id": record[1],
                 "pages_num": record[2],
                 "review": record[3],
-                "created_by": record[4]
+                "created_by": record[4],
             }
             for record in BOOKS_DATA
         ],

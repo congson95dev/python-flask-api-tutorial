@@ -4,20 +4,30 @@ from flask_jwt_extended import jwt_required
 from flask_restx import Resource, Namespace
 
 from src.common.response import Responses
-from src.schemas.Book.BookSchema import BookCreateRequestSchema, BookCreateResponseSchema, BookFilterQuerySchema, \
-    BookFilterResponseSchema, BookGetResponseSchema
+from src.schemas.Book.BookSchema import (
+    BookCreateRequestSchema,
+    BookCreateResponseSchema,
+    BookFilterQuerySchema,
+    BookFilterResponseSchema,
+    BookGetResponseSchema,
+)
 from src.service.BookService import BookService
 
 # we use flask_restx to handle api instead of Flask itself
-# in this flask_restx, the function is named by the HTTP method, such as get() = GET, post() = POST
+# in this flask_restx, the function is named by the HTTP method,
+# such as get() = GET, post() = POST
 # also, it will show api detail in browser, so we don't need to use postman to test API
 # we can test API directly on browser
 
-# add namespace for api, when we run in browser, we will see this in the title of each api block
-api = Namespace('Book', description='Book related operations', )
+# add namespace for api, when we run in browser,
+# we will see this in the title of each api block
+api = Namespace(
+    "Book",
+    description="Book related operations",
+)
 
 
-@api.route('/')
+@api.route("/")
 class Books(Resource):
     @jwt_required()
     @api.doc("Get list books by id")
@@ -38,7 +48,7 @@ class Books(Resource):
         return Responses.ok_response(response_data)
 
 
-@api.route('/<int:id>')
+@api.route("/<int:id>")
 class BookDetail(Resource):
     @api.doc("Get detail book by id")
     @responds(schema=BookGetResponseSchema, api=api, status_code=200)
@@ -66,4 +76,3 @@ class BookDetail(Resource):
     def put(self, id: int):
         BookService.delete_book(id)
         return Responses.ok_response_without_data()
-

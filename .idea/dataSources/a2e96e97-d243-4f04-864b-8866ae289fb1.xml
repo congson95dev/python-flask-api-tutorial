@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="bookstore.db">
-  <database-model serializer="dbm" dbms="SQLITE" family-id="SQLITE" format-version="4.43">
-    <root id="1">
-      <ServerVersion>3.39.2</ServerVersion>
-    </root>
+  <database-model serializer="dbm" dbms="SQLITE" family-id="SQLITE" format-version="4.49">
+    <root id="1"/>
     <collation id="2" parent="1" name="BINARY"/>
     <collation id="3" parent="1" name="NOCASE"/>
     <collation id="4" parent="1" name="RTRIM"/>
@@ -1319,7 +1317,7 @@
     </table>
     <table id="484" parent="166" name="users"/>
     <column id="485" parent="482" name="version_num">
-      <DataType>VARCHAR(32)|0s</DataType>
+      <DasType>VARCHAR(32)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
@@ -1334,42 +1332,42 @@
       <UnderlyingIndexName>sqlite_autoindex_alembic_version_1</UnderlyingIndexName>
     </key>
     <column id="488" parent="483" name="type">
-      <DataType>TEXT|0s</DataType>
+      <DasType>TEXT|0s</DasType>
       <Position>1</Position>
     </column>
     <column id="489" parent="483" name="name">
-      <DataType>TEXT|0s</DataType>
+      <DasType>TEXT|0s</DasType>
       <Position>2</Position>
     </column>
     <column id="490" parent="483" name="tbl_name">
-      <DataType>TEXT|0s</DataType>
+      <DasType>TEXT|0s</DasType>
       <Position>3</Position>
     </column>
     <column id="491" parent="483" name="rootpage">
-      <DataType>INT|0s</DataType>
+      <DasType>INT|0s</DasType>
       <Position>4</Position>
     </column>
     <column id="492" parent="483" name="sql">
-      <DataType>TEXT|0s</DataType>
+      <DasType>TEXT|0s</DasType>
       <Position>5</Position>
     </column>
     <column id="493" parent="484" name="id">
-      <DataType>INTEGER|0s</DataType>
+      <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
     <column id="494" parent="484" name="email">
-      <DataType>VARCHAR(80)|0s</DataType>
+      <DasType>VARCHAR(80)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
     <column id="495" parent="484" name="username">
-      <DataType>VARCHAR(80)|0s</DataType>
+      <DasType>VARCHAR(80)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
     <column id="496" parent="484" name="password">
-      <DataType>VARCHAR(80)|0s</DataType>
+      <DasType>VARCHAR(80)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>

@@ -8,6 +8,7 @@ from marshmallow import Schema, fields, pre_dump
 #       "success": ...
 # }
 
+
 # used in routes
 class Responses:
     @staticmethod
@@ -33,6 +34,6 @@ class BaseResponseSchema(Schema):
         out_data = {
             "data": in_data["data"],
             "success": in_data["success"],
-            "message": in_data["message"]
+            "message": in_data["message"],
         }
         return out_data

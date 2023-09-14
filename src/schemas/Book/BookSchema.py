@@ -52,7 +52,9 @@ class BookCreateRequestSchema(Schema):
     # even if in the previous code, we've set these 2 fields as required=False
     @validates_schema
     def validate_rate_review(self, data, **kwargs):
-        if (data.get('rate') and not data.get('review')) or (data.get('review') and not data.get('rate')):
+        if (data.get("rate") and not data.get("review")) or (
+            data.get("review") and not data.get("rate")
+        ):
             raise ValidationError("rate or review is required")
 
 
@@ -69,5 +71,3 @@ class BookCreateResponseSchema(BaseResponseSchema):
 # response for get by id api
 class BookGetResponseSchema(BaseResponseSchema):
     data = fields.Nested(BookFilterInSchema)
-
-

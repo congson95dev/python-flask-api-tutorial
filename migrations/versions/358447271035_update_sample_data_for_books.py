@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '358447271035'
-down_revision = '2e2801a8582b'
+revision = "358447271035"
+down_revision = "2e2801a8582b"
 branch_labels = None
 depends_on = None
 
@@ -21,9 +21,10 @@ depends_on = None
 def upgrade():
     op.execute(
         f"""
-                    UPDATE books
-                    SET updated_date = '{datetime.now().strftime("%d/%m/%Y %H:%M:%S")}', updated_by = 1;
-                """
+            UPDATE books
+            SET updated_date = '{datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
+            updated_by = 1;
+        """
     )
     pass
 
