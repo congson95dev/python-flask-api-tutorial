@@ -14,8 +14,8 @@ flake8:
 test:
 	# unit test using pytest and pytest-coverage
 build:
-	docker build -t python-flask-api-tutorial .
+	docker build -t flask-code-base .
 deploy:
-	docker run -d -p 0.0.0.0:5000:5000 python-flask-api-tutorial
+	docker run -d -p 0.0.0.0:5000:5000 flask-code-base
 
 all: install format lint flake8 test build deploy

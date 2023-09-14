@@ -1,11 +1,11 @@
 FROM python:3.8.13-slim-buster
 
 # created if the folder is not exists, if it does exists, then ignore this command
-RUN mkdir -p /python-flask-api-tutorial
+RUN mkdir -p /flask-code-base
 
 # copy current directory and main.py to /app/
-COPY . /python-flask-api-tutorial/
-WORKDIR /python-flask-api-tutorial
+COPY . /flask-code-base/
+WORKDIR /flask-code-base
 
 RUN pip install -r requirements.txt
 

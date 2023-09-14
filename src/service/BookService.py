@@ -59,12 +59,6 @@ class BookService:
             "page_size": int(size),
             "page": int(page),
             "total": total,
-            # if you got issue "object of type datetime is not json serializable"
-            # that because you didn't give the response schema as Datetime
-            # to avoid this, you will need to give response schema
-            # as Datetime for this column
-            # you can check in BookFilterDataSchema in file:
-            # src/schemas/Book/BookSchema.py
             "last_update": last_update.updated_date if last_update else None,
         }
 

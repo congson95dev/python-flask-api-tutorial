@@ -13,14 +13,6 @@ from src.schemas.Book.BookSchema import (
 )
 from src.service.BookService import BookService
 
-# we use flask_restx to handle api instead of Flask itself
-# in this flask_restx, the function is named by the HTTP method,
-# such as get() = GET, post() = POST
-# also, it will show api detail in browser, so we don't need to use postman to test API
-# we can test API directly on browser
-
-# add namespace for api, when we run in browser,
-# we will see this in the title of each api block
 api = Namespace(
     "Book",
     description="Book related operations",

@@ -1,12 +1,16 @@
-# This project is to practice flask api 
+# Flask Code Base
 
-### We use flask_restx to handle api and flask_jwt_extend to handle authenticate 
+### Requirements
+- **Python 3.8**
 
-### For db, we use postgres
+### Tech stack:
+- Database: postgres
+- Handle api: flask_restx
+- Authenticate: flask_jwt_extend
 
-### Install steps:
+### Installation:
 
-### First of all, you need to run this command to create environment for this project
+### Create environment:
 ```
 cd project_name
 
@@ -20,14 +24,19 @@ pip install -r requirements.txt
 ```
 sudo -i -u postgres psql
 
-CREATE DATABASE flask_api_tutorial_2;
+CREATE DATABASE flask_code_base;
 
-CREATE USER fudo8 WITH PASSWORD 'admin123';
+CREATE USER fudo WITH PASSWORD 'admin123';
 
-GRANT ALL PRIVILEGES ON DATABASE flask_api_tutorial_2 TO fudo8;
+GRANT ALL PRIVILEGES ON DATABASE flask_code_base TO fudo;
 ```
-### Then you need to config db info in .env file
-### After that, run this command to migrate database
+
+### Setting up environment
+- Create .env file in the root folder.
+- Copy the content from .env.example file to .env file.
+- Change config db info in .env file
+
+### Run migrate:
 ```
 flask db upgrade
 ```
@@ -37,74 +46,12 @@ flask run
 ```
 ### Go to `127.0.0.1:5000`
 
-### Now, you are good to go
-### Other information i've comment in the code
-### Try to read it to know how to use this api project
-
-### Run pre-commit:
-### Run this command and fix all the warning before committing code to the repo
+### Pre-commit:
+- Run this command and fix all the warning before committing code to the repo
 ```
 pre-commit run --all-files
 ```
-### Or run
+-  Or run
 ```
 pre-commit install
 ```
-
-# Knowledge i've used in this project:
-
-### 1. flask_restx for handle api
-
-### 2. flask_jwt_extend for authenticate
-
-### note: for authenticate, this project have login, logout, refresh token, revoke both refresh token and access token in one logout action, check token revoked, get current user info, check valid aud
-### Please check in this file: 
-```
-src/apis/auth/routes.py
-```
-### 3. migration to add sample data
-### Please check in this file:
-```
-migrations/versions/2c35179aa1da_create_sample_data_for_users_and_books.py
-```
-### 4. flask_accepts for set request schema, response schema
-
-### 5. set a general format for every api
-### Please check in this file:
-```
-src/apis/book/routes.py
-
-src/schemas/Book/BookSchema.py
-```
-
-### 6. custom exception response
-### Please check in this file:
-```
-src/common/response.py
-```
-### 7. general validate check exists by id
-### Please check in this file:
-```
-src/common/validate.py
-```
-### 8. @hybrid_property
-
-### 9. @validates_schema
-
-# Knowledge i still need to learning about:
-### ARRAY in db
-### schema job, employee, master data on screen
-### flask_accept accept/response
-### cron
-### authenticate
-### send email
-### upload/download
-### import/export (read file/write file)
-### command
-### read DB view
-### return 2 difference schema in 1 api
-### unit test
-### firebase notification
-### azure storage
-### POC
-### subcribe

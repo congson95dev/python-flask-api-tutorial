@@ -2,9 +2,6 @@ from flask_restx import fields
 
 from src import api
 
-# look like this schema feature is come from flask_restx as well
-# this schema is used as a validate for model
-
 
 user_register_schema = api.model(
     "UserRegisterSchema",

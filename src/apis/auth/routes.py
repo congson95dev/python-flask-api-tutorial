@@ -19,8 +19,6 @@ from src.common.security import authenticate
 from src.models import TokenBlocklist
 from src.models.user import User
 
-# add namespace for api, when we run in browser,
-# we will see this in the title of each api block
 api = Namespace(
     "Auth",
     description="Auth related operations",
@@ -84,11 +82,6 @@ class Login(Resource):
 
 # refresh token
 # need to transfer Authorization = Bearer $refresh_token which get from api /login
-# FE will check if access token is going to expire soon or not
-# if it's true, FE team gonna call this api
-# this api will create access token again and return that token to FE,
-# so they will copy this new access token and add to other API
-# docs: https://flask-jwt-extended.readthedocs.io/en/stable/refreshing_tokens/
 @api.route("/refresh")
 class Refresh(Resource):
     @jwt_required(refresh=True)

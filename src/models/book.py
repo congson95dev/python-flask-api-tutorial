@@ -11,10 +11,6 @@ class Book(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), unique=True, nullable=False)
-    # add foreign key
-    # foreign_keys is used because of
-    # this table is having 2 columns connect to the same table "users"
-    # it throwing an error, so we use foreign_keys to fix it
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     author = db.relationship("User", backref=backref("books"), foreign_keys=[author_id])
     pages_num = db.Column(db.Integer, nullable=False)
@@ -27,13 +23,6 @@ class Book(db.Model):
     deleted_date = db.Column(db.DateTime, nullable=True)
     deleted_by = db.Column(db.Integer, db.ForeignKey("users.id"))
 
-    # @hybrid_property is used to set a new field which doesn't save in db
-    # in this example,
-    # i've created a new field "title_author" which doesn't exists in db
-    # Ex: title_author = title + " - " + author.username
-    # This feature used to set "fullname" for table "user",
-    # in case table "user" only have "firstname" and "lastname"
-    # Ex: fullname = firstname + " - " + lastname
     @hybrid_property
     def title_author(self):
         if not self.title:

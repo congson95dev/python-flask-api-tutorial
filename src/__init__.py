@@ -40,33 +40,14 @@ handle_exception(app)
 # we use this instead of db = SQLAlchemy(app)
 db.init_app(app)
 
-# add migrate to handle database changed data
-#
-# to use migrate feature, we need to call this 2 line of code,
-# also we need to run this 3 command:
-# flask db init
-# flask db migrate -m "Initial migration."
-# flask db upgrade
-#
-# docs: https://flask-migrate.readthedocs.io/en/latest/
+# migrate
 migrate = Migrate()
 migrate.init_app(app, db)
 
-# init flask_jwt_extended
-# to use this jwt, you need to call /auth/login
-# with body = username and password of user to get access token
-#
-# then you call to /auth/protected to check user info,
-# need to transfer to the header:
-# key: Authorization
-# value: Bearer + ' ' + your access token
-#
-# from now on, if you want your api to set token before call,
-# you need to add @jwt_required() before function
+# init jwt
 jwt = JWTManager(app)
 
-
-# init api from flask_restx
+# init api
 api = Api(app)
 
 # we import this files at the end of the file because in those file,

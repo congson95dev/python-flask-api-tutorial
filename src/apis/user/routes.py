@@ -8,31 +8,16 @@ from sqlalchemy import or_
 from src.models.base import db
 from src.models.user import User
 
-# this have to import below the api variable,
-# because api variable is called in this UserSchema file
 from src.schemas.User.UserSchema import user_register_schema, user_update_schema
 
-# we use flask_restx to handle api instead of Flask itself
-# in this flask_restx, the function is named by the HTTP method,
-# such as get() = GET, post() = POST
-# also, it will show api detail in browser, so we don't need to use postman to test API
-# we can test API directly on browser
-
-# add namespace for api, when we run in browser,
-# we will see this in the title of each api block
 api = Namespace(
     "User",
     description="User related operations",
 )
 
 
-# when we add prefix to api and assign it to namespace, it will now used as a new api
-# so you have to use it like @user_api.route, but not @api.route as normal
-
-
 @api.route("/")
 class Users(Resource):
-    # @jwt_required used to make user must set token before call api
     @jwt_required()
     def get(self):
         # handle search
@@ -61,9 +46,6 @@ class Users(Resource):
             "users": result,
         }, 200
 
-    # this expect is called to schema,
-    # and this schema is like a validate to this function
-    # also, it will allow us to edit the value of api in browser
     @api.expect(user_register_schema, validate=True)
     def post(self):
         data = request.get_json()
@@ -97,9 +79,6 @@ class UserDetail(Resource):
             "user": result,
         }, 200
 
-    # this expect is called to schema,
-    # and this schema is like a validate to this function
-    # also, it will allow us to edit the value of api in browser
     @api.expect(user_update_schema, validate=True)
     def put(self, user_id):
         if user_id:
@@ -140,7 +119,6 @@ class UserDetail(Resource):
             }, 200
 
 
-# validate email so it will be in the format like test@gmail.com
 def validate_email(email):
     regex = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
     return True if re.match(regex, email) else False
