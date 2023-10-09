@@ -91,20 +91,45 @@ src/common/validate.py
 
 ### 9. @validates_schema
 
+### 10. logger
+### Please check in this file:
+```
+dev.py
+src/__init__.py
+```
+I've following this instruction:
+
+Very clear and detailed instruction:
+
+https://betterstack.com/community/guides/logging/how-to-start-logging-with-flask/
+
+Example:
+
+https://github1s.com/tenable/flask-logging-demo/blob/HEAD/single_file_app_pattern/flask_logs.py
+
+### 11. unit test
+
 # Knowledge i still need to learning about:
 ### ARRAY in db
 ### schema job, employee, master data on screen
-### flask_accept accept/response
 ### cron
-### authenticate
+### authenticate (almost done, need to check again at the way to revoke refresh token)
 ### send email
 ### upload/download
 ### import/export (read file/write file)
-### command
+### command (we already have command "flask test", but that's not what i'm looking for)
 ### read DB view
 ### return 2 difference schema in 1 api
-### unit test
 ### firebase notification
 ### azure storage
 ### POC
 ### subcribe
+
+# Note:
+
+### If you can't debug by set breakpoint in this project because of this issue:
+```
+sys.settrace() should not be used when the debugger is being used.
+```
+### this is because of `coverage` library issue
+### you should set the `FLASK_COVERAGE=0` in .env so it won't disable `coverage` 

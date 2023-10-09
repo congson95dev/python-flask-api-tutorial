@@ -1,0 +1,27 @@
+[run]
+branch = True
+
+source =
+    src
+
+omit =
+    src/__init__.py
+    src/tests/*
+    src/models/*
+    src/Config.py
+    src/protos/*
+    src/common/*
+    src/apis/book/*
+    src/apis/base.py
+    src/schemas/*
+
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:
+    def __str__(self):
+    # Ignore imports
+    from
+    import
+show_missing = True

@@ -1,12 +1,25 @@
-from flask import Flask
+import logging
+import os
+
+from flask import Flask, request
 from flask_migrate import Migrate
 from flask_restx import Api
 from flask_jwt_extended import JWTManager
 from src.models.base import db
 from src.Config import Config
 import datetime
+from datetime import datetime as dt
 from src.common.handle_exception import handle_exception
+from flask_cors import CORS
 
+# add coverage before init Flask will prevent issue of coverage
+# which is doesn't cover some class, method .. and the total percent is not get 100%
+COV = None
+if os.getenv("FLASK_COVERAGE") == "1":
+    import coverage
+
+    COV = coverage.coverage(config_file=".coveragerc")
+    COV.start()
 
 app = Flask(__name__)
 
@@ -32,6 +45,10 @@ app.config["JWT_REFRESH_TOKEN_EXPIRES"] = datetime.timedelta(days=30)
 app.config["JWT_SECRET_KEY"] = Config.JWT_SECRET_KEY
 # set this so when we return jsonify in api, it will not sort the result by alphabelt
 app.config["JSON_SORT_KEYS"] = False
+
+# cors allow all
+app.config["CORS_HEADERS"] = "Content-Type"
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 # add handle exception
 handle_exception(app)
@@ -65,9 +82,32 @@ migrate.init_app(app, db)
 # you need to add @jwt_required() before function
 jwt = JWTManager(app)
 
-
 # init api from flask_restx
 api = Api(app)
+
+# init logger
+# now we can import and use this without re-init it
+# check src/apis/auth/routes.py to see the demo
+logger = logging.getLogger()
+
+
+# log every API call to logs file
+# it will print in log file something like this:
+# [October 06, 2023 09:36:01 +07] [INFO | __init__:87] 127.0.0.1 [GET]
+# /user/ http http://127.0.0.1:5000/user?search=@gmail PostmanRuntime/7.33.0
+@app.before_request
+def before_request():
+    """Logging before every request."""
+    logger.info(
+        "%s [%s] %s %s %s %s",
+        request.remote_addr,
+        request.method,
+        request.path,
+        request.scheme,
+        request.referrer,
+        request.user_agent,
+    )
+
 
 # we import this files at the end of the file because in those file,
 # we call some variable of this __init__.py file inside it

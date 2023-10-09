@@ -12,7 +12,7 @@ from flask_jwt_extended import get_jwt, get_jti
 from flask_jwt_extended import jwt_required
 from flask_restx import Resource, Namespace
 
-from src import db
+from src import db, logger
 from src import jwt
 from src.Config import Config
 from src.common.security import authenticate
@@ -58,8 +58,9 @@ class Login(Resource):
 
         user = authenticate(username, password) or None
         if user is None:
+            logger.warning("Wrong username or password")
             return {
-                "message": "Wrong email or password",
+                "message": "Wrong username or password",
             }, 401
 
         # add additional info, such as aud
