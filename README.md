@@ -119,7 +119,6 @@ https://github1s.com/tenable/flask-logging-demo/blob/HEAD/single_file_app_patter
 ### import/export (read file/write file)
 ### command (we already have command "flask test", but that's not what i'm looking for)
 ### read DB view
-### return 2 difference schema in 1 api
 ### firebase notification
 ### azure storage
 ### POC
