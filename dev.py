@@ -1,6 +1,8 @@
+import logging
 import math
 import os
 import sys
+import re
 
 import click
 
@@ -46,6 +48,26 @@ def test(with_coverage=False, with_dir=""):
 if not os.path.exists("logs"):
     os.makedirs("logs")
 
+
+# logger masking
+class MaskingFormatter(logging.Formatter):
+    def format(self, record):
+        message = super().format(record)
+        masking_rules = [
+            (r"\b(\d{4}-\d{4}-\d{4}-\d{4})\b", "****-****-****-****"),  # Credit card
+            (r"\b(\d{3}-\d{2}-\d{4})\b", "***-**-****"),  # Social Security Numbers
+            (r"\b[\w\.-]+@[\w\.-]+\b", "user@example.com"),  # Email addresses
+            (r"\b(\d{3}-\d{3}-\d{4})\b", "***-***-****"),  # Phone numbers
+            (r'\bpassword[\'": ]*[^\'": ]+\b', "password: ********"),  # Passwords
+            (r"\bapi_key=[\w-]+\b", "api_key=***"),  # API keys and tokens
+        ]
+
+        for pattern, replacement in masking_rules:
+            message = re.sub(pattern, replacement, message)
+
+        return message
+
+
 # logger configuration
 # follow this instruction to understand and customize
 # it's very clear and detailed
@@ -59,11 +81,17 @@ dictConfig(
                 "| %(module)s:%(lineno)d] %(message)s",
                 "datefmt": "%B %d, %Y %H:%M:%S %Z",
             },
+            "masked": {
+                "()": MaskingFormatter,
+                "format": "[%(asctime)s] [%(levelname)s "
+                "| %(module)s:%(lineno)d] %(message)s",
+                "datefmt": "%B %d, %Y %H:%M:%S %Z",
+            },
         },
         "handlers": {
             "console": {
                 "class": "logging.StreamHandler",
-                "formatter": "default",
+                "formatter": "masked",
             },
             "time-rotate": {
                 "class": "logging.handlers.TimedRotatingFileHandler",
@@ -71,12 +99,28 @@ dictConfig(
                 "when": "D",
                 "interval": 7,
                 "backupCount": 5,
-                "formatter": "default",
+                "formatter": "masked",
             },
         },
         "root": {"level": "DEBUG", "handlers": ["console", "time-rotate"]},
     }
 )
+
+# Example log usage
+logger = logging.getLogger(__name__)
+credit_card_number = "1234-5678-9012-3456"
+ssn = "123-45-6789"
+email = "user@example.com"
+phone = "555-555-5555"
+password = "user_password"
+api_key = "api_key=abcdef123456"
+
+logger.info(f"User provided credit card number: {credit_card_number}")
+logger.info(f"User provided SSN: {ssn}")
+logger.info(f"User provided email: {email}")
+logger.info(f"User provided phone number: {phone}")
+logger.info(f"User provided password: {password}")
+logger.info(f"User provided API key: {api_key}")
 
 if __name__ == "__main__":
     app.run()

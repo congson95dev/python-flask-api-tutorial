@@ -139,6 +139,7 @@ class Protected(Resource):
                     "id": current_user.id,
                     "email": current_user.email,
                     "username": current_user.username,
+                    "role": current_user.role,
                     "aud": claims["aud"],
                 }, 200
 

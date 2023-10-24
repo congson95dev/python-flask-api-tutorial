@@ -109,6 +109,18 @@ https://github1s.com/tenable/flask-logging-demo/blob/HEAD/single_file_app_patter
 
 ### 11. unit test
 
+### 12. authorization
+
+flask_jwt_extend currently don't support authorize, so i've to customize it by followed by this instruction:
+
+https://stackoverflow.com/questions/72359179/flask-restful-api-authorization-for-specific-user-or-admin-user
+
+### Please check in this file:
+```
+src/common/security.py
+src/apis/book/routes.py
+```
+
 # Knowledge i still need to learning about:
 ### ARRAY in db
 ### schema job, employee, master data on screen
@@ -124,11 +136,24 @@ https://github1s.com/tenable/flask-logging-demo/blob/HEAD/single_file_app_patter
 ### POC
 ### subcribe
 
+
 # Note:
+
+---
 
 ### If you can't debug by set breakpoint in this project because of this issue:
 ```
 sys.settrace() should not be used when the debugger is being used.
 ```
 ### this is because of `coverage` library issue
-### you should set the `FLASK_COVERAGE=0` in .env so it won't disable `coverage` 
+### you should set the `FLASK_COVERAGE=0` in .env so it won't disable `coverage`
+
+---
+
+### For authenticate, currently, we storing revoked token to database for management purpose. 
+### Alternative, we could use redis to store instead
+### Following by this instructure:
+https://flask-jwt-extended.readthedocs.io/en/stable/blocklist_and_token_revoking.html#redis
+### Storing to redis could bring lose data when reboot/crash the system, so we should config so redis will be disk-persistent
+### Following by this instructure:
+https://stackoverflow.com/a/48718998/8962929
