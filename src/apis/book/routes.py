@@ -4,6 +4,10 @@ from flask_jwt_extended import jwt_required
 from flask_restx import Resource, Namespace
 
 from src.common.response import Responses
+from src.common.security import (
+    validate_role_itself_or_admin,
+    validate_assign_author_itself,
+)
 from src.schemas.Book.BookSchema import (
     BookCreateRequestSchema,
     BookCreateResponseSchema,
@@ -39,6 +43,7 @@ class Books(Resource):
         return Responses.ok_response(response)
 
     @jwt_required()
+    @validate_assign_author_itself()
     @api.doc("Create book")
     @accepts(schema=BookCreateRequestSchema, api=api)
     @responds(schema=BookCreateResponseSchema, api=api)
@@ -50,6 +55,8 @@ class Books(Resource):
 
 @api.route("/<int:id>")
 class BookDetail(Resource):
+    @jwt_required()
+    @validate_role_itself_or_admin()
     @api.doc("Get detail book by id")
     @responds(schema=BookGetResponseSchema, api=api, status_code=200)
     def get(self, id: int):
@@ -60,6 +67,7 @@ class BookDetail(Resource):
         return Responses.ok_response(response)
 
     @jwt_required()
+    @validate_assign_author_itself()
     @api.doc("Update book by id")
     @accepts(schema=BookCreateRequestSchema, api=api)
     @responds(schema=BookCreateResponseSchema, api=api, status_code=200)

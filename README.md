@@ -109,6 +109,18 @@ https://github1s.com/tenable/flask-logging-demo/blob/HEAD/single_file_app_patter
 
 ### 11. unit test
 
+### 12. authorization
+
+flask_jwt_extend currently don't support authorize, so i've to customize it by followed by this instruction:
+
+https://stackoverflow.com/questions/72359179/flask-restful-api-authorization-for-specific-user-or-admin-user
+
+### Please check in this file:
+```
+src/common/security.py
+src/apis/book/routes.py
+```
+
 # Knowledge i still need to learning about:
 ### ARRAY in db
 ### schema job, employee, master data on screen
