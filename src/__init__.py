@@ -23,7 +23,7 @@ if os.getenv("FLASK_COVERAGE") == "1":
 
 app = Flask(__name__)
 
-# connect to postgres db
+# connect to mysql db
 DB_URL = "mysql+pymysql://{user}:{pw}@{url}/{db}".format(
     user=Config.DB_USERNAME,
     pw=Config.DB_PASSWORD,
