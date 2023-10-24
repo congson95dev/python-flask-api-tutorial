@@ -21,7 +21,13 @@ def upgrade():
     op.add_column("users", sa.Column("role", sa.Integer(), nullable=True))
     role = table("users", column("role"))
     op.execute(role.update().values(role=1))
-    op.alter_column("users", "role", nullable=False)
+    op.alter_column(
+        "users",
+        "role",
+        existing_type=sa.Integer(),
+        nullable=False,
+        existing_nullable=True,
+    )
     # ### end Alembic commands ###
 
 

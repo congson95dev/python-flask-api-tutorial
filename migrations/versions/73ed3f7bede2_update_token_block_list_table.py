@@ -24,7 +24,13 @@ def upgrade():
     )
     type = table("token_block_list", column("type"))
     op.execute(type.update().values(type=""))
-    op.alter_column("token_block_list", "type", nullable=False)
+    op.alter_column(
+        "token_block_list",
+        "type",
+        existing_type=sa.String(length=16),
+        nullable=False,
+        existing_nullable=True,
+    )
     # ### end Alembic commands ###
 
 

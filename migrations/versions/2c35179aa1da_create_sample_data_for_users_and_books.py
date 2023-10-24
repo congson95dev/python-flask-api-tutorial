@@ -50,15 +50,12 @@ BOOKS_DATA = (
 # But with this 2nd way, it can't be update or ignore if there's duplicated records
 # If there's duplicated records, the command `flask db upgrade` will throw error
 def upgrade():
-    # Insert users data using op.execute
     op.execute(
         f"""
-                INSERT INTO users
-                VALUES {USERS_DATA}
-                ON CONFLICT DO NOTHING;
-
-                SELECT setval('users_id_seq', (SELECT MAX(id) from users), true);
-            """
+        INSERT INTO users
+        VALUES {USERS_DATA}
+        ON DUPLICATE KEY UPDATE id = id;
+        """
     )
 
     # Insert books data using bulk_insert

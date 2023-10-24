@@ -18,13 +18,9 @@ pip install -r requirements.txt
 ```
 ### If you don't have db yet, please follow this instruction:
 ```
-sudo -i -u postgres psql
+mysql -u root -p
 
 CREATE DATABASE flask_api_tutorial_2;
-
-CREATE USER fudo8 WITH PASSWORD 'admin123';
-
-GRANT ALL PRIVILEGES ON DATABASE flask_api_tutorial_2 TO fudo8;
 ```
 ### Then you need to config db info in .env file
 ### After that, run this command to migrate database

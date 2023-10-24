@@ -22,7 +22,7 @@ def upgrade():
     op.execute(
         f"""
             UPDATE books
-            SET updated_date = '{datetime.now().strftime("%d/%m/%Y %H:%M:%S")}',
+            SET updated_date = '{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}',
             updated_by = 1;
         """
     )
